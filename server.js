@@ -21,6 +21,8 @@ app.get('/', async (req, res) => {
     // Use Selenium to search Google
     var options = new chrome.Options();
     options.addArguments("--headless");
+    //uprava zde, v případě chyby smazat!
+    options.excludeSwitches('enable-logging');
     
     let driver = await new Builder()
     .forBrowser('chrome')
