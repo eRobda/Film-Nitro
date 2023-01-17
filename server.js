@@ -29,8 +29,9 @@ app.get('/', async (req, res) => {
     .setChromeOptions(options)
     .build();
     try {
-    await driver.get('https://prehrajto.cz/');
-    await driver.findElement(By.id('search-phrase')).sendKeys(String(query), Key.RETURN);
+      //dalsi uprava zde. Original: await driver.get('https://prehrajto.cz/);
+    await driver.get('https://prehrajto.cz/hledej/' + String(query));
+    //await driver.findElement(By.id('search-phrase')).sendKeys(String(query), Key.RETURN);
 
 
     const elements = await driver.findElements(By.className('column'));
