@@ -59,6 +59,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
         }
         input:focus{
             outline: none;
+            color: rgb(150,150,150);
         }
         header{
             background-color: rgb(30, 30, 30);
@@ -77,6 +78,14 @@ if(isset($_POST['username']) && isset($_POST['password'])){
         input{
             font-size: 16px;
         }
+        .login-btn{
+        	transition: .2s;
+        }
+        .login-btn:hover{
+        	transition: .2s;
+            cursor: pointer;
+            box-shadow: 0 0 7px rgb(100,100,100);
+        }
     </style>
 </head>
 <body>
@@ -86,7 +95,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
     <form method="post" action="login.php">
         <input type="text" name="username" placeholder="uživatelské jméno:" required>
         <input type="password" name="password" placeholder="heslo:" required>
-        <input type="submit" value="Login">
+        <input class="login-btn" type="submit" value="Login">
     </form>
 </body>
 </html>
