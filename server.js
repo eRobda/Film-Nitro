@@ -1,6 +1,6 @@
 const express = require('express');
 const { Builder, By, Capabilities, Key, until, Options } = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
+const firefox = require('selenium-webdriver/firefox');
 const cors = require('cors');
 
 const hostname = 'localhost';
@@ -19,14 +19,12 @@ app.get('/', async (req, res) => {
   if(query){
     console.log(Cas() + ' Hledám film: ' + query);
 
-    var options = new chrome.Options();
-    options.addArguments("--headless");
     //uprava zde, v případě chyby smazat!
-    options.excludeSwitches('enable-logging');
+    //options.excludeSwitches('enable-logging');
     
     let driver = await new Builder()
-      .forBrowser('chrome')
-      .setChromeOptions(options)
+      .forBrowser('firefox')
+      .setFirefoxOptions(new firefox.Options().headless())
       .build();
     try {
       //dalsi uprava zde. Original: await driver.get('https://prehrajto.cz/);
