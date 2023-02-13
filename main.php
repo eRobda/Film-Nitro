@@ -7,6 +7,35 @@ if(!isset($_SESSION['username'])){
 
 $username = $_SESSION['username'];
 //echo "Welcome, $username";
+
+$mysqli = new mysqli('eu-cdbr-west-03.cleardb.net', 'b59667cc031b8b', '79dfa041', 'heroku_f1e9af68bb8ac45');
+
+/* check connection */
+if ($mysqli->connect_errno) {
+    printf("Connect failed: %s\n", $mysqli->connect_error);
+    exit();
+}
+
+$query = "SELECT pfp FROM credentials WHERE username='$username'";
+$result = $mysqli->query($query);
+
+/* check for errors in the query */
+if (!$result) {
+    printf("Error: %s\n", $mysqli->error);
+    exit();
+}
+
+$row = $result->fetch_assoc();
+$pfp = $row['pfp'];
+
+/* check if a password was found */
+if (!$pfp) {
+    exit();
+}
+else{
+    $_SESSION['pfp'] = $pfp;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -16,14 +45,20 @@ $username = $_SESSION['username'];
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <title>Film Nitro</title>
+    <title>Nitro Film</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
         .material-symbols-outlined {
         font-variation-settings:
             'FILL' 1,
-            'wght' 400,
+            'wght' 600,
             'GRAD' 0,
             'opsz' 48
         }
@@ -31,70 +66,117 @@ $username = $_SESSION['username'];
             color: rgb(100, 100, 100);
         }
         *{
-            font-family: 'Roboto Mono', monospace;
+            font-family: 'Open Sans', sans-serif;
             box-sizing: border-box;
         }
         body{
             margin: 0;
-            background-color: rgb(24, 24, 24);
+            background: linear-gradient(156deg, rgba(255,165,92,1) 0%, rgba(232,62,208,1) 100%);
+            height: 100vh;
         }
         header{
-            background-color: rgb(30, 30, 30);
+            position: absolute;
             width: 100%;
             height: 40px;
             display: flex;
             justify-content: space-between;
         }
         .nadpis{
-            padding: 9px;
-            color: rgb(100, 100, 100);
+            position: absolute;
+            font-style: italic;
+            top: 5vh;
+            font-family: 'Open Sans', sans-serif;
+            left: 6vw;
+            font-size: 60px;
+            color: rgba(255,255,255,0.85);
             user-select: none;
+            font-weight: 800;
         }
         .menu{
             height: 100%;
             display: flex;
+            transition: .2s;
+            position: absolute;
+            right: 2vw;
+            top: 7.5vh;
+            animation: menuuu ease-out 1s;
+        }
+        @keyframes menuuu{
+            0%{
+                right: -2vw;
+                opacity: 0;
+            }
+            100%{
+                right: 2vw;
+                opacity: 1;
+            }
+        }
+        .menu:hover{
+            cursor: pointer;
+            transition: .2s;
+        }
+        .menu:hover .ico{
+            box-shadow: 0 0 7px rgb(255,255,255);
+            transition: .2s;
         }
         .username{
-            color: rgb(100,100,100);
-            margin: 8px 3px;
+            color: rgb(255,255,255);
+            font-family: 'Merriweather Sans', sans-serif;
+            margin: 12px 5px;
             user-select: none;
         }
         .ico{
-            padding: 5px;
-            font-size: 30px;
+            border-radius: 50%;
             user-select: none;
             cursor: pointer;
-            transition: .1s;
-        }
-        .ico:hover{
-            text-shadow: 0 0 3px rgb(100,100,100);
-            transition: .1s;
+            transition: .2s;
+            height: 30px;
+            width: 30px;
+            margin: 5px;
         }
 
         main{
-            display: grid;
-            place-items: center;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
         .main{
-            margin: 50px;
             height: 35px;
             width: 300px;
-            transition: .1s;
+            transition: .3s;
+            border-radius: 18px;
+            scale: 1.1;
+            position: absolute;
+            animation: none;
+            z-index: 10000;
+            animation: animace ease-out 1s;
+        }
+        @keyframes animace{
+            0%{
+                margin-top: 100vh;
+                opacity: 0;
+            }
+            100%{
+                margin-top: 0vh;
+                opacity: 1;
+            }
         }
         .main:hover{
-            background-color: rgb(35,35,35);
-            box-shadow: 0 0 5px rgba(80,80,80,0.5);
-            transition: .1s;
+            box-shadow: 0 0 10px rgba(255,255,255,1);
+            transition: .šs;
         }
         .main input{
             width: 100%;
             height: 100%;
+            border-radius: 18px;
             font-size: 14px;
-            background-color: rgb(30, 30, 30);
+            background-color: #fff;
             color: rgb(70,70,70);
-            padding-left: 10px;
+            padding-left: 17px;
+            padding-bottom:1px;
             border: none;
-            border-radius: 5px;
         }
         .main input:focus{
             outline: none;
@@ -103,19 +185,19 @@ $username = $_SESSION['username'];
         }
         .main span{
             position: absolute;
-            margin-left: 266px;
+            margin-left: 263px;
             padding: 7px;
             font-size: 20px;
             user-select: none;
             cursor: pointer;
-            transition: .1s;
-        }
-        .main span:hover{
-            text-shadow: 0 0 3px rgb(100,100,100);
-            transition: .1s;
         }
         main video{
-            border-radius: 5px;
+            border-radius: 20px;
+            opacity: 0;
+            margin-top: 7%;
+            z-index: 1000;
+            height: 60vh;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
         .loading{
             position: absolute;
@@ -133,11 +215,32 @@ $username = $_SESSION['username'];
             font-size: 20px;
             user-select: none;
         }
-        @keyframes textreveal{
+        @keyframes search-input{
             0%{
+                scale: 1.1;
+            }
+            100%{
+                margin-top: -40%;
+                scale: 1;
+            }
+        }
+        @keyframes search-video{
+            0%{
+                opacity: 0;
+                scale: 0;
+            }
+            100%{
+                opacity: 1;
+                scale: 1;
+            }
+        }
+        @keyframes search-text{
+            0%{
+                font-size: 0px;
                 opacity: 0;
             }
             100%{
+                font-size: 19px;
                 opacity: 1;
             }
         }
@@ -150,65 +253,74 @@ $username = $_SESSION['username'];
         .loading{
             display: none;
         }
+        .loading-text{
+            position: absolute;
+            color: rgba(255,255,255,0.8);
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 30px;
+            animation: none;
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
-    <div class="loading" id="loading-screen">
-        <div id="loading">načítání...</div>
-        <div id="text">načítaní trvá zpravidla maximálně 15 sekund</div>
-    </div>
     <header>
-        <div class="nadpis">Film Nitro</div>
+        <div class="nadpis">Nitro Film</div>
 
-        <div class="menu">
+        <div class="menu" id="acc">
             <div class="username"><?PHP echo $username; ?></div>
-            <span id="acc" class="material-symbols-outlined ico">account_circle</span>
+            <img id="pfp" src="<?php echo $_SESSION["pfp"]; ?>" class="ico premium">
         </div>
     </header>
     <main>
-        <div class="main">
+        <div class="main" id="main">
             <span id="search" class="material-symbols-outlined">search</span>
             <input id="input" type="text">
         </div>
-        <video id="video" width="1280" height="720" controls autoplay>
+        <video id="video" controls autoplay>
             <source src="" type="video/mp4">
             <source src="" type="video/ogg">
             Your browser does not support the video tag.
-          </video>
+        </video>
+        <div class="loading-text" id="loading-text">načítání...</div>
     </main>
 </body>
 <script>
-    let text = document.getElementById('loading');
-
     setInterval(() => {
-        if(text.innerHTML == "načítání"){
-            text.innerHTML = "načítání.";
+        let loading = document.getElementById("loading-text");
+
+        if(loading.innerHTML == "načítání..."){
+            loading.innerHTML = "načítání";
         }
-        else if(text.innerHTML == "načítání."){
-            text.innerHTML = "načítání..";
+        else if(loading.innerHTML == "načítání"){
+            loading.innerHTML = "načítání.";
         }
-        else if(text.innerHTML == "načítání.."){
-            text.innerHTML = "načítání...";
+        else if(loading.innerHTML == "načítání."){
+            loading.innerHTML = "načítání..";
         }
-        else if(text.innerHTML == "načítání..."){
-            text.innerHTML = "načítání";
+        else if(loading.innerHTML == "načítání.."){
+            loading.innerHTML = "načítání...";
         }
     }, 500);
-
 </script>
 <script>
     function Odkaz(film, callback){
-        fetch('https://61c8-78-80-124-106.eu.ngrok.io/?arg='+ film)
+        fetch('http://localhost:8080/?arg='+ film)
         .then(response => response.text())
         .then(data => callback(data))
     }
 
     document.getElementById("search").addEventListener("click", function(){
-        document.getElementById("loading-screen").style.display = "flex";
-        document.getElementById("text").style.animation = "textreveal";
+        //document.getElementById("loading-screen").style.display = "flex";
+        document.title = "Načítání...";
+        document.getElementById("main").style.animation = "search-input 1s ease 1 forwards";
+        document.getElementById("loading-text").style.animation = "search-text 1s ease 1 forwards";
         Odkaz(document.getElementById('input').value, function(data){
-            document.getElementById("loading-screen").style.display = "none";
-            document.getElementById("text").style.animation = "none";
+            document.title = "Nitro Film";
+            document.getElementById("video").style.animation = "search-video 1s ease 1 forwards";
+            document.getElementById("loading-text").style.opacity = "0";
             if(data != "nenalezeno"){
                 document.getElementById("video").src = data;
             }
